@@ -75,5 +75,21 @@
             Assert.AreEqual(obj.Text, dict["Text"]);
             Assert.AreEqual(obj.Date, dict["Date"]);
         }
+
+        [TestMethod]
+        public void Immutable()
+        {
+            // Arrange
+            var obj = new SomeImmutableData(new Guid("8d995e6e-af88-4043-8c31-8ba04c6b4298"), 23, "foo bar", null);
+
+            // Act
+            var dict = PropertiesHasher.Make(obj);
+
+            // Assert
+            Assert.AreEqual(obj.Id, dict["Id"]);
+            Assert.AreEqual(obj.Integer, dict["Integer"]);
+            Assert.AreEqual(obj.Text, dict["Text"]);
+            Assert.AreEqual(obj.Date, dict["Date"]);
+        }
     }
 }

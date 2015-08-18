@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Dynamic;
     using System.Linq;
+    using System.Reflection;
 
     /// <summary>
     /// Makes a property hash out of an object.
@@ -20,10 +21,21 @@
         public static IDictionary<string, object> Make(object toHash)
         {
             if (toHash == null) throw new ArgumentNullException("toHash");
+            else if (toHash is ExpandoObject) return (IDictionary<string, object>)toHash;
+            else
+            {
+                var properties = toHash.GetType().GetProperties();
+                var fields = toHash.GetType().GetFields();
+                var members = properties.Cast<MemberInfo>().Concat(fields.Cast<MemberInfo>());
+                return members.ToDictionary(m => m.Name, m => GetValue(toHash, m));
+            }
+        }
 
-            return toHash is ExpandoObject ?
-                (IDictionary<string, object>)toHash :
-                toHash.GetType().GetProperties().ToDictionary(p => p.Name, p => p.GetValue(toHash, null));
+        private static object GetValue(object obj, MemberInfo member)
+        {
+            if (member is PropertyInfo) return ((PropertyInfo)member).GetValue(obj, null);
+            else if (member is FieldInfo) return ((FieldInfo)member).GetValue(obj);
+            else throw new ArgumentException("Passed member is neither a PropertyInfo nor a FieldInfo.");
         }
     }
 }
