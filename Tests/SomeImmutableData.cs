@@ -1,4 +1,4 @@
-﻿namespace PropertiesHash.Tests
+﻿namespace DictionaryLibrary.Tests
 {
     using System;
 

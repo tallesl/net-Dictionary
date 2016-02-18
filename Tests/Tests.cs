@@ -1,4 +1,4 @@
-﻿namespace PropertiesHash.Tests
+﻿namespace DictionaryLibrary.Tests
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
@@ -22,7 +22,7 @@
                 };
 
             // Act
-            var dict = PropertiesHasher.Make(obj);
+            var dict = DictionaryMaker.Make(obj);
 
             // Assert
             Assert.AreEqual(obj.Id, dict["Id"]);
@@ -44,7 +44,7 @@
             // Act
             // If I use "var dict" here the type of dict is an ExpandoObject...
             // What on earth is that?
-            IDictionary<string, object> dict = PropertiesHasher.Make(obj);
+            IDictionary<string, object> dict = DictionaryMaker.Make(obj);
 
             // Assert
             Assert.AreEqual(obj.Id, dict["Id"]);
@@ -67,7 +67,7 @@
                 };
 
             // Act
-            var dict = PropertiesHasher.Make(obj);
+            var dict = DictionaryMaker.Make(obj);
 
             // Assert
             Assert.AreEqual(obj.Id, dict["Id"]);
@@ -83,7 +83,7 @@
             var obj = new SomeImmutableData(new Guid("8d995e6e-af88-4043-8c31-8ba04c6b4298"), 23, "foo bar", null);
 
             // Act
-            var dict = PropertiesHasher.Make(obj);
+            var dict = DictionaryMaker.Make(obj);
 
             // Assert
             Assert.AreEqual(obj.Id, dict["Id"]);

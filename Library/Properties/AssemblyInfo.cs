@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PropertiesHash")]
+[assembly: AssemblyTitle("Dictionary")]
 [assembly: AssemblyDescription("Makes a dictionary out of the given object properties.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
