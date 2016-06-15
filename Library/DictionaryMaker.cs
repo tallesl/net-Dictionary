@@ -43,6 +43,9 @@
         /// </returns>
         public static IDictionary<string, Tuple<Type, object>> MakeWithType(object input)
         {
+            if (input == null)
+                throw new ArgumentNullException("input");
+
             if (input is ExpandoObject)
                 return ((IDictionary<string, object>)input).ToDictionary(
                     kvp => kvp.Key,
