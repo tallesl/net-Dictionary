@@ -12,12 +12,50 @@
         public void Typical()
         {
             // Arrange
-            var obj = new SomeData()
+            var obj = new SomeData
             {
                 Id = new Guid("8d995e6e-af88-4043-8c31-8ba04c6b4298"),
                 Integer = 23,
                 Text = "foo bar",
                 Date = null
+            };
+
+            // Act
+            var dict = DictionaryMaker.Make(obj);
+
+            // Assert
+            Assert.AreEqual(obj.Id, dict["Id"]);
+            Assert.AreEqual(obj.Integer, dict["Integer"]);
+            Assert.AreEqual(obj.Text, dict["Text"]);
+            Assert.AreEqual(obj.Date, dict["Date"]);
+        }
+
+        [TestMethod]
+        public void Immutable()
+        {
+            // Arrange
+            var obj = new SomeImmutableData(new Guid("8d995e6e-af88-4043-8c31-8ba04c6b4298"), 23, "foo bar", null);
+
+            // Act
+            var dict = DictionaryMaker.Make(obj);
+
+            // Assert
+            Assert.AreEqual(obj.Id, dict["Id"]);
+            Assert.AreEqual(obj.Integer, dict["Integer"]);
+            Assert.AreEqual(obj.Text, dict["Text"]);
+            Assert.AreEqual(obj.Date, dict["Date"]);
+        }
+
+        [TestMethod]
+        public void Anonymous()
+        {
+            // Arrange
+            var obj = new
+            {
+                Id = new Guid("8d995e6e-af88-4043-8c31-8ba04c6b4298"),
+                Integer = 23,
+                Text = "foo bar",
+                Date = (DateTime?)null
             };
 
             // Act
@@ -53,45 +91,29 @@
         }
 
         [TestMethod]
-        public void Anonymous()
+        public void Dictionary()
         {
             // Arrange
-            var obj = new
+            var obj = new Dictionary<string, object>
             {
-                Id = new Guid("8d995e6e-af88-4043-8c31-8ba04c6b4298"),
-                Integer = 23,
-                Text = "foo bar",
-                Date = (DateTime?)null
+                { "Id", new Guid("8d995e6e-af88-4043-8c31-8ba04c6b4298") },
+                { "Integer", 23 },
+                { "Text", "foo bar" },
+                { "Date", (DateTime?)null }
             };
 
             // Act
             var dict = DictionaryMaker.Make(obj);
 
             // Assert
-            Assert.AreEqual(obj.Id, dict["Id"]);
-            Assert.AreEqual(obj.Integer, dict["Integer"]);
-            Assert.AreEqual(obj.Text, dict["Text"]);
-            Assert.AreEqual(obj.Date, dict["Date"]);
+            Assert.AreEqual(obj["Id"], dict["Id"]);
+            Assert.AreEqual(obj["Integer"], dict["Integer"]);
+            Assert.AreEqual(obj["Text"], dict["Text"]);
+            Assert.AreEqual(obj["Date"], dict["Date"]);
         }
 
         [TestMethod]
-        public void Immutable()
-        {
-            // Arrange
-            var obj = new SomeImmutableData(new Guid("8d995e6e-af88-4043-8c31-8ba04c6b4298"), 23, "foo bar", null);
-
-            // Act
-            var dict = DictionaryMaker.Make(obj);
-
-            // Assert
-            Assert.AreEqual(obj.Id, dict["Id"]);
-            Assert.AreEqual(obj.Integer, dict["Integer"]);
-            Assert.AreEqual(obj.Text, dict["Text"]);
-            Assert.AreEqual(obj.Date, dict["Date"]);
-        }
-
-        [TestMethod]
-        public void WithType()
+        public void AnonymousWithType()
         {
             // Arrange
             var obj = new
@@ -130,6 +152,28 @@
             Assert.AreEqual(new Tuple<Type, object>(typeof(int), obj.Integer), dict["Integer"]);
             Assert.AreEqual(new Tuple<Type, object>(typeof(string), obj.Text), dict["Text"]);
             Assert.AreEqual(new Tuple<Type, object>(typeof(object), obj.Date), dict["Date"]);
+        }
+
+        [TestMethod]
+        public void DictionaryType()
+        {
+            // Arrange
+            var obj = new Dictionary<string, object>
+            {
+                { "Id", new Guid("8d995e6e-af88-4043-8c31-8ba04c6b4298") },
+                { "Integer", 23 },
+                { "Text", "foo bar" },
+                { "Date", (DateTime?)null }
+            };
+
+            // Act
+            var dict = DictionaryMaker.MakeWithType(obj);
+
+            // Assert
+            Assert.AreEqual(new Tuple<Type, object>(typeof(Guid), obj["Id"]), dict["Id"]);
+            Assert.AreEqual(new Tuple<Type, object>(typeof(int), obj["Integer"]), dict["Integer"]);
+            Assert.AreEqual(new Tuple<Type, object>(typeof(string), obj["Text"]), dict["Text"]);
+            Assert.AreEqual(new Tuple<Type, object>(typeof(object), obj["Date"]), dict["Date"]);
         }
     }
 }

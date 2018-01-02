@@ -24,12 +24,13 @@
             if (input == null)
                 throw new ArgumentNullException("input");
 
-            if (input is ExpandoObject)
+            if (input is IDictionary<string, object>)
                 return (IDictionary<string, object>)input;
 
             var properties = input.GetType().GetProperties();
             var fields = input.GetType().GetFields();
             var members = properties.Cast<MemberInfo>().Concat(fields.Cast<MemberInfo>());
+
             return members.ToDictionary(m => m.Name, m => GetValue(input, m));
         }
 
@@ -46,7 +47,7 @@
             if (input == null)
                 throw new ArgumentNullException("input");
 
-            if (input is ExpandoObject)
+            if (input is IDictionary<string, object>)
                 return ((IDictionary<string, object>)input).ToDictionary(
                     kvp => kvp.Key,
                     kvp => kvp.Value == null ?
